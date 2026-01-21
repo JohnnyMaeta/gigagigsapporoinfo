@@ -18,38 +18,41 @@ AI（人工知能）を相棒にして、SDGs（持続可能な開発目標）�
 ## 🛠️ 便利なツール（リンク集）
 学習を助けてくれる相棒たちです。
 
-| ツール名 | 用途 | リンク |
-| :--- | :--- | :--- |
-| **UNICEF SDGs動画** | 17の目標を動画で知る | [🎥 視聴する](https://www.unicef.or.jp/kodomo/sdgs/17goals/) |
-| **NotebookLM** | 資料を整理してAIと話す | [🤖 開く](https://notebooklm.google.com/) |
-| **調べ学習サポートくん** | 疑問を一緒に考えてくれるGemini | [💎 相談する](https://gemini.google.com/gem/152DkdXXBwuIZVdVgJW4H1Z_mR1kZ8M9n?usp=sharing) |
-| **わからない言葉確認くん** | むずかしい言葉を教えてくれるGemini | [📖 調べる](https://gemini.google.com/gem/1EYfd008Fw4hHpJihABzxK3Oh3EX2XY4x?usp=sharing) |
-| **掲示板（Padlet）** | みんなの成果をシェアする場所 | [📋 見る](https://padlet.com/kumaya77/ict-ai-pxapx4gqi4aq3tqm) |
+| ツール名              | 用途                   | リンク                                                                                    |
+| :---------------- | :------------------- | :------------------------------------------------------------------------------------- |
+| **UNICEF SDGs動画** | 17の目標を動画で知る          | [📋 視聴する](https://www.unicef.or.jp/kodomo/sdgs/17goals/)                              |
+| **NotebookLM**    | 資料を整理してAIと話す         | [🤖 開く](https://notebooklm.google.com/)                                                |
+| **調べ学習サポートくん**    | 疑問を一緒に考えてくれるGemini   | [💎 相談する](https://gemini.google.com/gem/152DkdXXBwuIZVdVgJW4H1Z_mR1kZ8M9n?usp=sharing) |
+| **わからない言葉確認くん**   | むずかしい言葉を教えてくれるGemini | [📖 調べる](https://gemini.google.com/gem/1EYfd008Fw4hHpJihABzxK3Oh3EX2XY4x?usp=sharing)  |
+| **掲示板（Padlet）**   | みんなの成果をシェアする場所       | [📋 見る](https://padlet.com/kumaya77/ict-ai-pxapx4gqi4aq3tqm)                           |
 
 ---
 
 ## 📅 各時間の進め方
 
 ### 🕐 1時間目：SDGsについて知り、目標を決めよう
+- [ ] **ルーブリックを見る**: 何をすればいいのかつかもう[ルーブリック](https://docs.google.com/document/d/1Se8kFsrupeboTOjpYd3j7PpNVxQDsEV0TAcfW10F1y0/edit?usp=sharing)
 - [ ] **SDGsを知る**: どんな課題があるのか全体像をつかもう。
 - [ ] **動画視聴**: 17の目標から気になるものを見つけよう。 [🎥 動画はこちら](https://www.unicef.or.jp/kodomo/sdgs/17goals/)
 - [ ] **選定**: 「一番興味がある目標」と「一番興味がない（よく知らない）目標」を選ぼう。
-- [ ] **振り返り**: [アンケートに答える](https://forms.gle/BooHnTWJLhEi3WUz9)
+- [ ] **記録**:ワークシートに記入しよう。[ワークシート](https://docs.google.com/document/d/1-kAgdCddlGnplC8zuTjZWRmHpWbNY2bmmVSD0ta5fvA/template/preview)※クリックするとワークシートが新規コピーされます。以後はコピーされたものを使います。
+- [ ] **振り返り**: 今日の学習を振り返ろう。[フォームに記入する](https://forms.gle/BooHnTWJLhEi3WUz9)
 
 ### 🕑 2時間目：ざっくり説明する準備をしよう
-- [ ] **NotebookLMの準備**: 調べる目標の資料を読み込ませよう。
+- [ ] **NotebookLMの準備**: 調べる目標の資料を読み込ませよう。[🤖 開く](https://notebooklm.google.com/)
 - [ ] **ソース集め**: 信頼できる情報を集めよう。
     > **💡 AIへのプロンプト例：**
     > 「小学４年生でもわかるSDGsの目標『（選んだ番号）』に関する資料」
 - [ ] **解説を作る**: 音声解説や動画解説をAIで作ってみよう。
 - [ ] **考えをまとめる**: できた解説を見て、「自分ならどう説明するか」を考えよう。
-- [ ] **録画・振り返り**: 今の理解を記録して[振り返り](https://forms.gle/BooHnTWJLhEi3WUz9)をしよう。
+- [ ] **録画**:調べる目標を何もみないで一言で説明しよう。[録画する](https://vids.new)
+- [ ]  **振り返り**: 今日の学習を振り返ろう。[フォームに記入する](https://forms.gle/BooHnTWJLhEi3WUz9)
 
 ### 🕒 3時間目：自分が調べる目標から「ぎもん」を見つけよう
 - [ ] **ワークシート確認**: これから何を調べるか整理しよう。
 - [ ] **AIと対話**: 「調べ学習サポートくん」の使い方をマスターしよう。
 - [ ] **疑問を出す**: AIと一緒に、深掘りしたい疑問を3つ考えよう。
-- [ ] **振り返り**: [本日のまとめ](https://forms.gle/BooHnTWJLhEi3WUz9)
+- [ ]  **振り返り**: 今日の学習を振り返ろう。[フォームに記入する](https://forms.gle/BooHnTWJLhEi3WUz9)
 
 ### 🕓 4時間目：今までの内容をスライドにしておこう
 - [ ] **スライド作成**: まずは「文字」だけでOK！
