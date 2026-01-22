@@ -18,13 +18,13 @@ AI（人工知能）を相棒にして、SDGs（持続可能な開発目標）�
 ## 🛠️ 便利なツール（リンク集）
 学習を助けてくれる相棒たちです。
 
-| ツール名              | 用途                   | リンク                                                                                                               |
-| :---------------- | :------------------- | :---------------------------------------------------------------------------------------------------------------- |
-| **UNICEF SDGs動画** | 17の目標を動画で知る          | <a href="https://www.unicef.or.jp/kodomo/sdgs/17goals/" target="_blank">📋 視聴する</a>                               |
-| **NotebookLM**    | 資料を整理してAIと話す         | <a href="https://notebooklm.google.com/" target="_blank">🤖 開く</a>                                                |
-| **調べ学習サポートくん**    | 疑問を一緒に考えてくれるGemini   | <a href="https://gemini.google.com/gem/1wVMFVg7G79WBdNHnEunO9lMN_gflv7Ks?usp=sharing" target="_blank">💎 相談する</a> |
-| **わからない言葉確認くん**   | むずかしい言葉を教えてくれるGemini | <a href="https://gemini.google.com/gem/1EYfd008Fw4hHpJihABzxK3Oh3EX2XY4x?usp=sharing" target="_blank">📖 調べる</a>  |
-| **掲示板（Padlet）**   | みんなの成果をシェアする場所       | <a href="https://padlet.com/kumaya77/ict-ai-pxapx4gqi4aq3tqm" target="_blank">📋 見る</a>                           |
+| ツール名            | 用途                   | リンク                                                                                                               |
+| :-------------- | :------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| **UNICEF SDGs** | 17の目標を知る             | <a href="https://www.unicef.or.jp/kodomo/sdgs/17goals/" target="_blank">📋 視聴する</a>                               |
+| **NotebookLM**  | 資料を整理してAIと話す         | <a href="https://notebooklm.google.com/" target="_blank">🤖 開く</a>                                                |
+| **調べ学習サポートくん**  | 疑問を一緒に考えてくれるGemini   | <a href="https://gemini.google.com/gem/1wVMFVg7G79WBdNHnEunO9lMN_gflv7Ks?usp=sharing" target="_blank">💎 相談する</a> |
+| **わからない言葉確認くん** | むずかしい言葉を教えてくれるGemini | <a href="https://gemini.google.com/gem/1EYfd008Fw4hHpJihABzxK3Oh3EX2XY4x?usp=sharing" target="_blank">📖 調べる</a>  |
+| **掲示板（Padlet）** | みんなの成果をシェアする場所       | <a href="https://padlet.com/kumaya77/ict-ai-pxapx4gqi4aq3tqm" target="_blank">📋 見る</a>                           |
 
 ---
 
@@ -33,7 +33,7 @@ AI（人工知能）を相棒にして、SDGs（持続可能な開発目標）�
 ### 🕐 1時間目：SDGsについて知り、目標を決めよう
 - [ ] **ルーブリックを見る**: 何をすればいいのかつかもう <a href="https://docs.google.com/document/d/1Se8kFsrupeboTOjpYd3j7PpNVxQDsEV0TAcfW10F1y0/edit?usp=sharing" target="_blank">📄 ルーブリック</a>
 - [ ] **SDGsを知る**: どんな課題があるのか全体像をつかもう。
-- [ ] **動画視聴**: 17の目標から気になるものを見つけよう。 <a href="https://www.unicef.or.jp/kodomo/sdgs/17goals/" target="_blank">🎥 動画はこちら</a>
+- [ ] **SDGsの目標**: 17の目標から気になるものを見つけよう。 <a href="https://www.unicef.or.jp/kodomo/sdgs/17goals/" target="_blank">🎥 動画はこちら</a>
 - [ ] **選定**: 「一番興味がある目標」と「一番興味がない（よく知らない）目標」を選ぼう。
 - [ ] **記録**:ワークシートに記入しよう。<a href="https://docs.google.com/document/d/1-kAgdCddlGnplC8zuTjZWRmHpWbNY2bmmVSD0ta5fvA/template/preview" target="_blank">📝 ワークシート</a> ※クリックするとワークシートが新規コピーされます。以後はコピーされたものを使います。
 - [ ] **振り返り**: 今日の学習を振り返ろう。<a href="https://forms.gle/BooHnTWJLhEi3WUz9" target="_blank">📝 フォームに記入する</a>
