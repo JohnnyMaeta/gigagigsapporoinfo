@@ -33,7 +33,7 @@ AI（人工知能）を相棒にして、SDGs（持続可能な開発目標）�
 ### 🕐 1時間目：SDGsについて知り、目標を決めよう
 - [ ] **ルーブリックを見る**: 何をすればいいのかつかもう <a href="https://docs.google.com/document/d/1Se8kFsrupeboTOjpYd3j7PpNVxQDsEV0TAcfW10F1y0/edit?usp=sharing" target="_blank">📄 ルーブリック</a>
 - [ ] **SDGsを知る**: どんな課題があるのか全体像をつかもう。
-- [ ] **SDGsの目標**: 17の目標から気になるものを見つけよう。 <a href="https://www.unicef.or.jp/kodomo/sdgs/17goals/" target="_blank">🎥 動画はこちら</a>
+- [ ] **SDGsの目標**: 17の目標から気になるものを見つけよう。 <a href="https://www.unicef.or.jp/kodomo/sdgs/17goals/" target="_blank">📄 こちら</a>
 - [ ] **選定**: 「一番興味がある目標」と「一番興味がない（よく知らない）目標」を選ぼう。
 - [ ] **記録**:ワークシートに記入しよう。<a href="https://docs.google.com/document/d/1-kAgdCddlGnplC8zuTjZWRmHpWbNY2bmmVSD0ta5fvA/template/preview" target="_blank">📝 ワークシート</a> ※クリックするとワークシートが新規コピーされます。以後はコピーされたものを使います。
 - [ ] **振り返り**: 今日の学習を振り返ろう。<a href="https://forms.gle/BooHnTWJLhEi3WUz9" target="_blank">📝 フォームに記入する</a>
