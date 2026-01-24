@@ -86,6 +86,6 @@ AI（人工知能）を相棒にして、SDGs（持続可能な開発目標）�
 <a href="https://docs.google.com/document/d/1Apj9afblIzKMzMIYEk6A1kpWojhpZUqlgHGtg1W8E3w/edit?usp=sharing" target="_blank">👉 プロンプト集</a>
 
 ## 🎥 関連動画
-- [Geminiで学習振り返り→AIがコメント→Googleフォームで提出完了！](https://youtu.be/tcoHR4MpJw4)
-- [私がGeminiとnotebookLMをつかって、今やっている総合的な学習の授業](https://youtu.be/rKEdD7bEwKQ)
-- [他の先生が作ったGemを自分の学級用にカスタマイズする](https://youtu.be/Acsl77LCvQQ)
+- <a href="https://youtu.be/tcoHR4MpJw4" target="_blank">Geminiで学習振り返り→AIがコメント→Googleフォームで提出完了！</a>
+- <a href="https://youtu.be/rKEdD7bEwKQ" target="_blank">私がGeminiとnotebookLMをつかって、今やっている総合的な学習の授業</a>
+- <a href="https://youtu.be/Acsl77LCvQQ" target="_blank">他の先生が作ったGemを自分の学級用にカスタマイズする</a>
