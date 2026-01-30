@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIGAGig 札幌 2026 オペレーションセンター</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        .scroll-hidden::-webkit-scrollbar { display: none; }
+        .scroll-hidden { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals with Hokkaido Blue Accents -->
+    <!-- Application Structure Plan: 
+         1. Dashboard Header: Real-time status, weather alert simulation, and critical metrics.
+         2. Interactive Schedule (Timeline): A Gantt-style view using Chart.js to visualize the flow of workshops and breaks, highlighting tight connections.
+         3. Team & Roles Matrix: Interactive cards to filter staff by function (Logistics, Tech, Speaker) for quick role verification.
+         4. Crisis Management Console: A dedicated section to simulate 'Plan B' scenarios (Flight cancellations) and see the impact on the schedule/staffing.
+         5. Logistics Checklist: Digital tracking of critical items (Cash, Wi-Fi, Sushi).
+         This structure prioritizes 'Operational Readiness' and 'Risk Management', reflecting the source report's focus on coordination and weather contingencies. -->
+    <!-- Visualization & Content Choices:
+         - Schedule: Chart.js Horizontal Bar Chart. Goal: Visualize time blocks. Interaction: Click bar for details.
+         - Role Distribution: Chart.js Doughnut Chart. Goal: Balance of power. Interaction: Filter staff list.
+         - Crisis Sim: Toggle Switches. Goal: Demonstrate Plan B logic. Interaction: Updates UI text/state.
+         - NO SVG/Mermaid used. Icons are Unicode. Layout is Tailwind Grid/Flex. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-stone-800 selection:bg-sky-200">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-tight text-stone-700">❄️ GIGAGig<span class="text-sky-600">Ops</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="scrollToSection('dashboard')" class="text-stone-600 hover:text-sky-600 transition-colors font-medium">ダッシュボード</button>
+                    <button onclick="scrollToSection('schedule')" class="text-stone-600 hover:text-sky-600 transition-colors font-medium">スケジュール</button>
+                    <button onclick="scrollToSection('team')" class="text-stone-600 hover:text-sky-600 transition-colors font-medium">チーム</button>
+                    <button onclick="scrollToSection('crisis')" class="text-red-500 hover:text-red-700 transition-colors font-bold">⚠️ 緊急対応</button>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-stone-500 hover:text-stone-700 focus:outline-none">
+                        <span class="text-2xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="scrollToSection('dashboard')" class="block w-full text-left px-3 py-2 text-stone-600 hover:bg-stone-50 rounded-md">ダッシュボード</button>
+                <button onclick="scrollToSection('schedule')" class="block w-full text-left px-3 py-2 text-stone-600 hover:bg-stone-50 rounded-md">スケジュール</button>
+                <button onclick="scrollToSection('team')" class="block w-full text-left px-3 py-2 text-stone-600 hover:bg-stone-50 rounded-md">チーム</button>
+                <button onclick="scrollToSection('crisis')" class="block w-full text-left px-3 py-2 text-red-500 font-bold hover:bg-red-50 rounded-md">緊急対応</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- SECTION 1: DASHBOARD OVERVIEW -->
+        <section id="dashboard" class="animate-fade-in">
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-stone-800">イベント本部（指令センター）</h1>
+                <p class="mt-2 text-stone-600 max-w-3xl">
+                    <strong>GIGAGig 札幌 2026</strong> の統合オペレーションハブへようこそ。
+                    このダッシュボードでは、1月31日（札幌エルプラザ）のスケジュール、スタッフ配置、緊急時の対応計画（コンティンジェンシープラン）を一元管理します。
+                    気象警報やロジスティクスの準備状況をここで確認してください。
+                </p>
+            </div>
+
+            <!-- Key Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 border-l-4 border-l-sky-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-stone-500">開催日</p>
+                            <h3 class="text-2xl font-bold text-stone-800">2026.01.31</h3>
+                        </div>
+                        <span class="text-2xl">📅</span>
+                    </div>
+                    <div class="mt-2 text-sm text-stone-600">土曜日 @ エルプラザ</div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 border-l-4 border-l-indigo-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-stone-500">ワークショップ</p>
+                            <h3 class="text-2xl font-bold text-stone-800">全6セッション</h3>
+                        </div>
+                        <span class="text-2xl">🎤</span>
+                    </div>
+                    <div class="mt-2 text-sm text-stone-600">開始: 10:00</div>
+                </div>
+
+                <div id="weather-card" class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 border-l-4 border-l-orange-500 transition-all duration-300">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-stone-500">天気予報</p>
+                            <h3 id="weather-status" class="text-2xl font-bold text-orange-600">大雪警報</h3>
+                        </div>
+                        <span id="weather-icon" class="text-2xl">☃️</span>
+                    </div>
+                    <div class="mt-2 text-sm text-stone-600">降雪量 30cm 予想</div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 border-l-4 border-l-emerald-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-stone-500">ロジスティクス</p>
+                            <h3 class="text-2xl font-bold text-stone-800">準備OK</h3>
+                        </div>
+                        <span class="text-2xl">🍣</span>
+                    </div>
+                    <div class="mt-2 text-sm text-stone-600">会場・昼食確保済み</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: SCHEDULE & TIMELINE -->
+        <section id="schedule" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-6 border-b border-stone-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-stone-800">運営タイムライン</h2>
+                    <p class="text-sm text-stone-500 mt-1">
+                        当日の流れを可視化します。バーをクリックすると詳細が表示されます。<br>
+                        <span class="text-red-500 text-xs font-bold">【重要】:</span> スタッフは9:00に集合し、設営を開始してください。
+                    </p>
+                </div>
+                <div class="flex items-center space-x-2 bg-stone-100 p-2 rounded-lg">
+                    <span class="text-xs font-bold text-stone-500 uppercase">表示:</span>
+                    <button id="view-all-btn" class="px-3 py-1 bg-white shadow text-xs font-medium rounded text-stone-700">全日</button>
+                    <button id="view-pm-btn" class="px-3 py-1 text-xs font-medium text-stone-500 hover:text-stone-700">午後中心</button>
+                </div>
+            </div>
+            
+            <div class="p-6 bg-stone-50">
+                <div class="chart-container">
+                    <canvas id="scheduleChart"></canvas>
+                </div>
+                <div id="schedule-details" class="mt-6 p-4 bg-white border border-stone-200 rounded-lg hidden animate-fade-in">
+                    <h4 id="detail-title" class="font-bold text-lg text-stone-800">イベント詳細</h4>
+                    <p id="detail-desc" class="text-stone-600 mt-1">詳細説明</p>
+                    <div class="mt-2 flex gap-2" id="detail-tags">
+                        <!-- Tags injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: STAFF & ROLES -->
+        <section id="team" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left: Chart & Filters -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                    <h2 class="text-xl font-bold text-stone-800 mb-4">チーム構成</h2>
+                    <p class="text-sm text-stone-600 mb-4">
+                        役割分担の内訳です。複数の役割を兼務しているメンバーもいます（例：登壇者＆スタッフ）。
+                    </p>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="roleChart"></canvas>
+                    </div>
+                    <div class="mt-6 space-y-2">
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">スタッフ絞り込み</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="filterStaff('all')" class="px-3 py-1 bg-stone-800 text-white text-sm rounded-full hover:bg-stone-700 transition">全員</button>
+                            <button onclick="filterStaff('現地運営')" class="px-3 py-1 bg-emerald-100 text-emerald-800 text-sm rounded-full hover:bg-emerald-200 transition">現地運営</button>
+                            <button onclick="filterStaff('技術')" class="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm rounded-full hover:bg-indigo-200 transition">技術/配信</button>
+                            <button onclick="filterStaff('登壇者')" class="px-3 py-1 bg-amber-100 text-amber-800 text-sm rounded-full hover:bg-amber-200 transition">登壇者</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Staff Cards -->
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 h-full">
+                    <h2 class="text-xl font-bold text-stone-800 mb-6">スタッフ名簿 & 任務</h2>
+                    <div id="staff-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Staff Cards Injected Here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CRISIS MANAGEMENT -->
+        <section id="crisis" class="bg-stone-900 text-white rounded-2xl shadow-lg overflow-hidden border border-stone-700">
+            <div class="p-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-3xl">⚠️</span>
+                            <h2 class="text-2xl font-bold text-white">緊急対応コンソール</h2>
+                        </div>
+                        <p class="text-stone-400 mt-2">
+                            悪天候時の「プランB」シナリオをシミュレーションします。<br>
+                            現在の予報: <span class="text-white font-bold">札幌圏 降雪30cm</span>
+                        </p>
+                    </div>
+                    <div class="flex items-center bg-stone-800 rounded-lg p-1 border border-stone-600">
+                        <button id="mode-normal" onclick="setMode('normal')" class="px-4 py-2 rounded-md bg-stone-600 text-white font-medium shadow transition-all">通常モード</button>
+                        <button id="mode-blizzard" onclick="setMode('blizzard')" class="px-4 py-2 rounded-md text-stone-400 hover:text-white font-medium transition-all">❄️ 吹雪モード</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Scenario Status -->
+                    <div class="col-span-1 md:col-span-2 bg-stone-800/50 p-6 rounded-xl border border-stone-700">
+                        <h3 class="text-lg font-bold text-sky-400 mb-4">運営状況</h3>
+                        <div id="ops-status-list" class="space-y-4">
+                            <!-- Dynamic Status Items -->
+                            <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-emerald-500 status-item" data-type="flight">
+                                <div>
+                                    <p class="font-bold">フライト (青森/東京)</p>
+                                    <p class="text-xs text-stone-400">予定通り到着確認済み。</p>
+                                </div>
+                                <span class="text-emerald-400 font-mono">定刻</span>
+                            </div>
+                             <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-emerald-500 status-item" data-type="venue">
+                                <div>
+                                    <p class="font-bold">会場アクセス</p>
+                                    <p class="text-xs text-stone-400">札幌エルプラザ (札幌駅)</p>
+                                </div>
+                                <span class="text-emerald-400 font-mono">問題なし</span>
+                            </div>
+                             <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-emerald-500 status-item" data-type="speaker">
+                                <div>
+                                    <p class="font-bold">メイン登壇者</p>
+                                    <p class="text-xs text-stone-400">前多, 鈴谷, 新井</p>
+                                </div>
+                                <span class="text-emerald-400 font-mono">現地入り</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Plan -->
+                    <div class="bg-stone-800/50 p-6 rounded-xl border border-stone-700">
+                        <h3 class="text-lg font-bold text-orange-400 mb-4">アクションプラン</h3>
+                        <ul id="action-list" class="space-y-3 text-sm text-stone-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-500">✔</span> B+C室の仕切り開放を確認。
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-500">✔</span> 会場費支払い（現金） - 渡邉。
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-500">✔</span> レンタルWi-Fiの受取。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: LOGISTICS CHECKLIST -->
+        <section id="logistics" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+             <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-stone-800">ロジスティクス & 備品</h2>
+                    <p class="text-stone-500 text-sm">重要な物理的資産の在庫状況。</p>
+                </div>
+                <div class="text-3xl bg-stone-100 p-2 rounded-lg">📦</div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="p-4 border border-stone-200 rounded-lg bg-stone-50">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-stone-700">トリトン寿司</span>
+                        <span>🍣</span>
+                    </div>
+                    <p class="text-xs text-stone-500">スタッフ用昼食</p>
+                    <div class="mt-2 text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-1 rounded inline-block">渡邉（車で受取）</div>
+                </div>
+                 <div class="p-4 border border-stone-200 rounded-lg bg-stone-50">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-stone-700">Micro:bitキット</span>
+                        <span>🤖</span>
+                    </div>
+                    <p class="text-xs text-stone-500">ワークショップ用</p>
+                    <div class="mt-2 text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded inline-block">鈴谷（持ち込み）</div>
+                </div>
+                 <div class="p-4 border border-stone-200 rounded-lg bg-stone-50">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-stone-700">ATEM Mini</span>
+                        <span>🎥</span>
+                    </div>
+                    <p class="text-xs text-stone-500">配信機材</p>
+                    <div class="mt-2 text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded inline-block">鈴谷/小林</div>
+                </div>
+                 <div class="p-4 border border-stone-200 rounded-lg bg-stone-50">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-stone-700">会場費支払い</span>
+                        <span>💴</span>
+                    </div>
+                    <p class="text-xs text-stone-500">現金必須</p>
+                    <div class="mt-2 text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-1 rounded inline-block">渡邉</div>
+                </div>
+                 <div class="p-4 border border-stone-200 rounded-lg bg-stone-50">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-stone-700">参加者名簿</span>
+                        <span>📋</span>
+                    </div>
+                    <p class="text-xs text-stone-500">取扱注意データ</p>
+                    <div class="mt-2 text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded inline-block">渡邉（Excel）</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-stone-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-stone-400 text-sm">
+            <p>GIGAGig 札幌 2026 オペレーションダッシュボード</p>
+            <p class="mt-1">イベント概要データに基づき作成 • Powered by Chart.js & Tailwind</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA STATE ---
+        const eventDate = "2026-01-31";
+        
+        // Staff Data
+        const staffData = [
+            { name: "渡邉 先生", roles: ["現地運営", "会計", "食事"], icon: "🏢", task: "会場費支払（現金）、寿司受取、機材受取" },
+            { name: "鈴谷 先生", roles: ["技術", "登壇者", "現地運営"], icon: "📡", task: "Wi-Fi、Micro:bitキット、配信機材。*8:50 新千歳着*" },
+            { name: "小林 先生", roles: ["技術", "予備登壇者"], icon: "🚑", task: "配信設営。**予備プランB: マイクラWS**" },
+            { name: "新井 先生", roles: ["登壇者", "受付"], icon: "📝", task: "進行管理、受付、WS講師" },
+            { name: "前多 先生", roles: ["登壇者"], icon: "🎤", task: "メインWS講師。*フライトリスク: 青森*" },
+            { name: "山川 先生", roles: ["登壇者"], icon: "🎓", task: "WS講師" },
+            { name: "豊福 先生", roles: ["登壇者"], icon: "👨🏫", task: "WS講師" },
+            { name: "小野 先生", roles: ["技術"], icon: "⚙️", task: "配信補助" }
+        ];
+
+        // Schedule Data (Time in decimal hours for Chart.js: 9.0 = 9:00, 10.5 = 10:30)
+        const scheduleItems = [
+            { label: "スタッフ集合", start: 9.0, end: 10.0, type: "prep", desc: "会場設営 & テックチェック (B+C室)" },
+            { label: "WS ①", start: 10.0, end: 10.9, type: "session", desc: "ワークショップ セッション1" },
+            { label: "休憩", start: 10.9, end: 11.0, type: "break", desc: "短い休憩" },
+            { label: "WS ② (短縮)", start: 11.0, end: 11.5, type: "session", desc: "短縮ワークショップ (新井/鈴谷)" },
+            { label: "昼食 (トリトン)", start: 11.5, end: 12.83, type: "break", desc: "寿司ランチ & 交流" },
+            { label: "WS ③ (短縮)", start: 12.83, end: 13.4, type: "session", desc: "短縮ワークショップ" },
+            { label: "WS ④", start: 13.4, end: 14.5, type: "session", desc: "ワークショップ セッション4" },
+            { label: "WS ⑤", start: 14.5, end: 15.58, type: "session", desc: "ワークショップ セッション5" },
+            { label: "WS ⑥", start: 15.58, end: 16.5, type: "session", desc: "ワークショップ セッション6" },
+            { label: "片付け/終了", start: 16.5, end: 17.25, type: "prep", desc: "イベント終了 & 片付け" },
+            { label: "懇親会 (居酒屋)", start: 17.25, end: 19.5, type: "social", desc: "居酒屋「炎」にて懇親会" }
+        ];
+
+        // --- CHART JS SETUP ---
+        let scheduleChartInstance = null;
+        let roleChartInstance = null;
+
+        function initCharts() {
+            // 1. Schedule Chart (Horizontal Bar as Gantt)
+            const ctxSchedule = document.getElementById('scheduleChart').getContext('2d');
+            
+            // Prepare data
+            const labels = scheduleItems.map(i => i.label);
+            const dataStart = scheduleItems.map(i => i.start);
+            const dataDuration = scheduleItems.map(i => i.end - i.start);
+            const bgColors = scheduleItems.map(i => {
+                if (i.type === 'session') return 'rgba(14, 165, 233, 0.7)'; // Sky blue
+                if (i.type === 'break') return 'rgba(251, 146, 60, 0.7)'; // Orange
+                if (i.type === 'prep') return 'rgba(120, 113, 108, 0.5)'; // Stone
+                return 'rgba(244, 63, 94, 0.7)'; // Red/Pink for Social
+            });
+
+            scheduleChartInstance = new Chart(ctxSchedule, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Start Time (Hidden)',
+                            data: dataStart,
+                            backgroundColor: 'transparent',
+                            barPercentage: 0.8,
+                        },
+                        {
+                            label: 'Duration',
+                            data: dataDuration,
+                            backgroundColor: bgColors,
+                            borderRadius: 4,
+                            barPercentage: 0.8,
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            min: 8.5,
+                            max: 20,
+                            ticks: {
+                                callback: function(value) {
+                                    const h = Math.floor(value);
+                                    const m = Math.round((value - h) * 60);
+                                    return `${h}:${m < 10 ? '0' : ''}${m}`;
+                                }
+                            }
+                        },
+                        y: { stacked: true }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.datasetIndex === 0) return null;
+                                    const index = context.dataIndex;
+                                    const item = scheduleItems[index];
+                                    const startH = Math.floor(item.start);
+                                    const startM = Math.round((item.start - startH) * 60);
+                                    const endH = Math.floor(item.end);
+                                    const endM = Math.round((item.end - endH) * 60);
+                                    return `${item.desc} (${startH}:${startM < 10 ? '0'+startM : startM} - ${endH}:${endM < 10 ? '0'+endM : endM})`;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            showScheduleDetail(index);
+                        }
+                    }
+                }
+            });
+
+            // 2. Role Distribution Chart (Doughnut)
+            const ctxRole = document.getElementById('roleChart').getContext('2d');
+            
+            // Count roles
+            const roleCounts = { '現地運営': 0, '技術': 0, '登壇者': 0, '予備': 0 };
+            staffData.forEach(s => {
+                if (s.roles.includes('現地運営')) roleCounts['現地運営']++;
+                if (s.roles.includes('技術')) roleCounts['技術']++;
+                if (s.roles.includes('登壇者')) roleCounts['登壇者']++;
+                if (s.roles.includes('予備登壇者')) roleCounts['予備']++;
+            });
+
+            roleChartInstance = new Chart(ctxRole, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(roleCounts),
+                    datasets: [{
+                        data: Object.values(roleCounts),
+                        backgroundColor: [
+                            '#10b981', // Emerald (Local)
+                            '#6366f1', // Indigo (Tech)
+                            '#f59e0b', // Amber (Speaker)
+                            '#ef4444'  // Red (Backup)
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+
+        // --- DOM MANIPULATION FUNCTIONS ---
+
+        function renderStaffGrid(filter = 'all') {
+            const grid = document.getElementById('staff-grid');
+            grid.innerHTML = '';
+
+            const filteredStaff = filter === 'all' 
+                ? staffData 
+                : staffData.filter(s => s.roles.some(r => r.includes(filter)));
+
+            filteredStaff.forEach(staff => {
+                let badges = staff.roles.map(r => {
+                    let color = 'bg-stone-100 text-stone-600';
+                    if(r.includes('登壇者')) color = 'bg-amber-100 text-amber-800';
+                    if(r.includes('技術')) color = 'bg-indigo-100 text-indigo-800';
+                    if(r.includes('現地')) color = 'bg-emerald-100 text-emerald-800';
+                    if(r.includes('予備')) color = 'bg-red-100 text-red-800 font-bold';
+                    return `<span class="px-2 py-0.5 rounded text-xs ${color}">${r}</span>`;
+                }).join('');
+
+                const card = document.createElement('div');
+                card.className = "p-4 rounded-xl border border-stone-200 hover:shadow-md transition bg-stone-50";
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-xl shadow-sm border border-stone-100">${staff.icon}</div>
+                        <div>
+                            <h4 class="font-bold text-stone-800">${staff.name}</h4>
+                            <div class="flex flex-wrap gap-1 mt-1">${badges}</div>
+                        </div>
+                    </div>
+                    <div class="mt-2 text-sm text-stone-600 border-t border-stone-200 pt-2">
+                        <span class="font-bold text-xs text-stone-400 uppercase">担当:</span> ${staff.task}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterStaff(role) {
+            renderStaffGrid(role);
+        }
+
+        function showScheduleDetail(index) {
+            const item = scheduleItems[index];
+            const detailBox = document.getElementById('schedule-details');
+            document.getElementById('detail-title').innerText = item.label;
+            document.getElementById('detail-desc').innerText = item.desc;
+            
+            // Format time
+            const startH = Math.floor(item.start);
+            const startM = Math.round((item.start - startH) * 60);
+            const endH = Math.floor(item.end);
+            const endM = Math.round((item.end - endH) * 60);
+            const timeStr = `${startH}:${startM < 10 ? '0'+startM : startM} - ${endH}:${endM < 10 ? '0'+endM : endM}`;
+
+            const tagsContainer = document.getElementById('detail-tags');
+            tagsContainer.innerHTML = `<span class="bg-stone-200 text-stone-700 px-2 py-1 rounded text-xs font-bold">${timeStr}</span>`;
+            
+            detailBox.classList.remove('hidden');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // --- CRISIS SIMULATION LOGIC ---
+
+        function setMode(mode) {
+            const normalBtn = document.getElementById('mode-normal');
+            const blizBtn = document.getElementById('mode-blizzard');
+            const statusList = document.getElementById('ops-status-list');
+            const actionList = document.getElementById('action-list');
+            const weatherStatus = document.getElementById('weather-status');
+            const weatherIcon = document.getElementById('weather-icon');
+            const weatherCard = document.getElementById('weather-card');
+
+            if (mode === 'normal') {
+                // UI Styles
+                normalBtn.className = "px-4 py-2 rounded-md bg-stone-600 text-white font-medium shadow transition-all";
+                blizBtn.className = "px-4 py-2 rounded-md text-stone-400 hover:text-white font-medium transition-all";
+                weatherCard.classList.remove('border-l-red-600', 'bg-red-50');
+                weatherCard.classList.add('border-l-orange-500', 'bg-white');
+                
+                // Data
+                weatherStatus.innerText = "大雪警報";
+                weatherStatus.className = "text-2xl font-bold text-orange-600";
+                weatherIcon.innerText = "☃️";
+
+                statusList.innerHTML = `
+                    <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-emerald-500 status-item">
+                        <div><p class="font-bold">フライト (青森/東京)</p><p class="text-xs text-stone-400">予定通り到着確認済み。</p></div>
+                        <span class="text-emerald-400 font-mono">定刻</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-emerald-500 status-item">
+                        <div><p class="font-bold">会場アクセス</p><p class="text-xs text-stone-400">エルプラザ (札幌駅)</p></div>
+                        <span class="text-emerald-400 font-mono">問題なし</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-emerald-500 status-item">
+                        <div><p class="font-bold">メイン登壇者</p><p class="text-xs text-stone-400">前多/鈴谷/新井</p></div>
+                        <span class="text-emerald-400 font-mono">現地入り</span>
+                    </div>
+                `;
+                
+                actionList.innerHTML = `
+                    <li class="flex items-start gap-2"><span class="text-emerald-500">✔</span> B+C室の仕切り開放を確認。</li>
+                    <li class="flex items-start gap-2"><span class="text-emerald-500">✔</span> 会場費支払い（現金） - 渡邉。</li>
+                    <li class="flex items-start gap-2"><span class="text-emerald-500">✔</span> レンタルWi-Fiの受取。</li>
+                `;
+
+            } else {
+                // BLIZZARD MODE
+                normalBtn.className = "px-4 py-2 rounded-md text-stone-400 hover:text-white font-medium transition-all";
+                blizBtn.className = "px-4 py-2 rounded-md bg-red-600 text-white font-medium shadow transition-all";
+                weatherCard.classList.remove('border-l-orange-500', 'bg-white');
+                weatherCard.classList.add('border-l-red-600', 'bg-red-50');
+
+                // Data
+                weatherStatus.innerText = "緊急事態: 吹雪";
+                weatherStatus.className = "text-2xl font-bold text-red-600 animate-pulse";
+                weatherIcon.innerText = "❄️⚠️";
+
+                statusList.innerHTML = `
+                    <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-red-500 status-item">
+                        <div><p class="font-bold">フライト</p><p class="text-xs text-stone-400">青森/東京便 欠航</p></div>
+                        <span class="text-red-400 font-mono font-bold">欠航</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-emerald-500 status-item">
+                        <div><p class="font-bold">会場アクセス</p><p class="text-xs text-stone-400">地下道経由でエルプラザ到達可</p></div>
+                        <span class="text-emerald-400 font-mono">OK</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-stone-800 rounded border-l-4 border-amber-500 status-item">
+                        <div><p class="font-bold">登壇者</p><p class="text-xs text-stone-400">メイン講師リモート/不在</p></div>
+                        <span class="text-amber-400 font-mono">切替中</span>
+                    </div>
+                `;
+
+                actionList.innerHTML = `
+                    <li class="flex items-start gap-2 text-red-300 font-bold"><span class="text-red-500">⚠️</span> プランB発動: オンライン切替</li>
+                    <li class="flex items-start gap-2 text-amber-300"><span class="text-amber-500">➜</span> 小林先生による予備WS (マイクラ) 開始。</li>
+                    <li class="flex items-start gap-2"><span class="text-stone-400">➜</span> リモート登壇者を会場プロジェクターに接続 (Zoom)。</li>
+                    <li class="flex items-start gap-2"><span class="text-stone-400">➜</span> Peatix経由で参加者に変更通知を送信。</li>
+                `;
+            }
+        }
+
+        // --- INIT ---
+        window.addEventListener('load', () => {
+            initCharts();
+            renderStaffGrid();
+
+            // Mobile menu toggle
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                const menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            });
+            
+            // View Buttons
+            document.getElementById('view-all-btn').addEventListener('click', () => {
+                 scheduleChartInstance.options.scales.x.min = 8.5;
+                 scheduleChartInstance.update();
+                 document.getElementById('view-all-btn').classList.add('bg-white','shadow', 'text-stone-700');
+                 document.getElementById('view-all-btn').classList.remove('text-stone-500');
+                 document.getElementById('view-pm-btn').classList.remove('bg-white','shadow', 'text-stone-700');
+                 document.getElementById('view-pm-btn').classList.add('text-stone-500');
+            });
+            
+            document.getElementById('view-pm-btn').addEventListener('click', () => {
+                 scheduleChartInstance.options.scales.x.min = 12.0;
+                 scheduleChartInstance.update();
+                 document.getElementById('view-pm-btn').classList.add('bg-white','shadow', 'text-stone-700');
+                 document.getElementById('view-pm-btn').classList.remove('text-stone-500');
+                 document.getElementById('view-all-btn').classList.remove('bg-white','shadow', 'text-stone-700');
+                 document.getElementById('view-all-btn').classList.add('text-stone-500');
+            });
+        });
+
+    </script>
+</body>
+</html>
